@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface ICardProps {
+interface CardProps {
   id: number;
   title: string;
   content: string;
@@ -9,7 +9,7 @@ interface ICardProps {
   onDone: (id: number, isDone: boolean) => void;
 }
 
-function Card({ id, title, content, isDone, onDelete, onDone }: ICardProps) {
+function Card({ id, title, content, isDone, onDelete, onDone }: CardProps) {
   return (
     <CardWrap>
       <CardTitle>{title}</CardTitle>

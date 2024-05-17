@@ -1,28 +1,36 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Card from './components/Card';
+import Form from './components/Form';
 
-export interface ITodo {
+export interface TodoProps {
   id: number;
   title: string;
   content: string;
   isDone: boolean;
 }
 
+export interface onAddProps {
+  e: React.FormEvent<HTMLButtonElement>;
+  titleRef: React.RefObject<HTMLInputElement>;
+  contentRef: React.RefObject<HTMLInputElement>;
+}
+
 function App() {
   let nextId = useRef(0);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLInputElement>(null);
-  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [todos, setTodos] = useState<TodoProps[]>([]);
 
-  const onAdd = (e: React.FormEvent<HTMLButtonElement>) => {
+  const onAdd = ({ e, titleRef, contentRef }: onAddProps) => {
     e.preventDefault();
     const title = titleRef.current ? titleRef.current.value : '';
     const content = contentRef.current ? contentRef.current.value : '';
 
-    if (title === '' || content === '') return;
+    if (title === '' || content === '') {
+      alert('제목과 내용을 모두 입력후 추가해주세요');
+      return;
+    }
 
-    const newTodo: ITodo = {
+    const newTodo: TodoProps = {
       id: ++nextId.current,
       title,
       content,
@@ -52,15 +60,7 @@ function App() {
     <Container>
       <Header>My Todo List</Header>
 
-      <Form>
-        <InputWrap>
-          <label htmlFor="inputTitle">제목</label>
-          <Input id="inputTitle" ref={titleRef}></Input>
-          <label htmlFor="inputContent">내용</label>
-          <Input id="inputContent" ref={contentRef}></Input>
-        </InputWrap>
-        <Button onClick={onAdd}>추가하기</Button>
-      </Form>
+      <Form onAdd={onAdd} />
 
       <p>Working...🔥</p>
       <Working>
@@ -110,35 +110,6 @@ const Header = styled.div`
   height: 50px;
   line-height: 50px;
   vertical-align: center;
-`;
-const Form = styled.form`
-  background-color: lightgrey;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 60px;
-  margin-bottom: 30px;
-`;
-
-const InputWrap = styled.div`
-  margin-left: 100px;
-  display: flex;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  width: 250px;
-  height: 30px;
-  border: none;
-  border-radius: 5px;
-`;
-
-const Button = styled.button`
-  margin-right: 100px;
-  background-color: green;
-  width: 100px;
-  border: none;
-  height: 30px;
 `;
 
 const Working = styled.div`
